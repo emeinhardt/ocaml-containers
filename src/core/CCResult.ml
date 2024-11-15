@@ -199,6 +199,11 @@ let both x y =
 
 (** {2 Collections} *)
 
+let ap_l f x = 
+  match f, x with
+    | (Error xs, Error ys) -> Error (CCList.append xs ys)
+    | _ -> f <*> x 
+
 let map_l f l =
   let rec map acc l =
     match l with

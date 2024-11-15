@@ -231,6 +231,16 @@ include module type of Infix
 
 (** {2 Collections} *)
 
+val ap_l : ('a -> 'b, 'err list) t -> ('a, 'err list) t -> ('b, 'err list) t
+(** Behaves like [<*>], except that it accumulates errors instead of
+    short-circuiting and returning the first (if any) errors encountered:
+    [ap_l (Error ["418: I'm a teapot"]) (Error ["Unfooable bar: baz"])]
+    evaluates to [Error ["418: I'm a teapot"; "Unfooable bar: baz"]].
+
+    This is a lawful ap ("[<*>]") for [('a, 'err list) t]; together, these two
+    define what is often called the "validation" applicative. There is no
+    associated monad with comparable error-accumulating behavior. *)
+
 val flatten_l : ('a, 'err) t list -> ('a list, 'err) t
 (** Same as [map_l id]: returns [Ok [x1;…;xn]] if [l=[Ok x1; …; Ok xn]],
     or the first error otherwise.
